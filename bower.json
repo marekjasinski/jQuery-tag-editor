@@ -6,7 +6,7 @@
         "jquery": ">=1.7",
         "caret": null
     },
-    "homepage": "https://github.com/marekjasinski/jQuery-tagEditor",
+    "homepage": "https://github.com/marekjasinski/jQuery-tag-editor",
     "authors": [{
         "name": "Simon Steinberger",
         "url": "https://pixabay.com/users/Simon/",
