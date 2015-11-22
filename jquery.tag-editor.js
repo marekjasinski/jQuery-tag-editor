@@ -20,6 +20,9 @@
         // helper - check first/second character
         function typeOfTag(tag) {
             switch(tag.substr(0,1)) {
+                case '-':
+                    tag = tag.substring(1);
+                    break;
                 case '@':
                     tag = tag.substring(1);
                     break;
@@ -39,6 +42,9 @@
         // helper - set img in case of special characters
         function typeOfTagThumb(tag) {
             switch(tag.substr(0,1)) {
+                case '-':
+                    tag = 'fa-minus-circle';
+                    break;
                 case '@':
                     tag = 'fa-at';
                     break;
