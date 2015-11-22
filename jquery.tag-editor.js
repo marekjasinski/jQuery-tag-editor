@@ -14,7 +14,7 @@
 
         // helper
         function escape(tag) {
-            return tag.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+            return tag.replace(/"/g, "'").replace(/</g, "&lt;").replace(/>/g, "&gt;"); //.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
         }
 
         // helper - check first/second character
@@ -81,13 +81,13 @@
                 else if (options == 'addTag') {
                     if (o.maxTags && ed.data('tags').length >= o.maxTags) return false;
                     // insert new tag
-                    $('<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><div class="tag-editor-tag"></div><div class="tag-editor-delete"><i></i></div></li>').appendTo(ed).find('.tag-editor-tag')
-                    .html('<input type="text" maxlength="'+o.maxLength+'">').addClass('active').find('input').val(typeOfTag(val)).attr('data-tag', val).blur();
+                    $('<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><span class="origin-tag hidden"></span><div class="tag-editor-tag"></div><div class="tag-editor-delete"><i></i></div></li>').appendTo(ed).find('.tag-editor-tag')
+                    .html('<input type="text" maxlength="'+o.maxLength+'">').addClass('active').find('input').val(typeOfTag(val)).blur();
                     if (!blur) ed.click();
                     else $('.placeholder', ed).remove();
                 } else if (options == 'removeTag') {
                     // trigger delete on matching tag, then click editor to create a new tag
-                    $('.tag-editor-tag', ed).filter(function(){return $(this).attr('data-tag')==val;}).closest('li').find('.tag-editor-delete').click();
+                    $('.tag-editor-tag', ed).filter(function(){return $(this).parent().find('.origin-tag').text()==val;}).closest('li').find('.tag-editor-delete').click();
                     if (!blur) ed.click();
                 } else if (options == 'destroy') {
                     el.removeClass('tag-editor-hidden-src').removeData('options').off('focus.tag-editor').next('.tag-editor').remove();
@@ -128,7 +128,7 @@
             ed.append('<li style="width:1px">&nbsp;</li>');
 
             // markup for new tag
-            var new_tag = '<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><div class="tag-editor-tag"></div><div class="tag-editor-delete"><i></i></div></li>';
+            var new_tag = '<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><span class="origin-tag hidden"></span><div class="tag-editor-tag"></div><div class="tag-editor-delete"><i></i></div></li>';
 
             // helper: update global data
             function set_placeholder(){
@@ -140,7 +140,7 @@
             function update_globals(init){
                 var old_tags = tag_list.toString();
                 tag_list = $('.tag-editor-tag:not(.deleted)', ed).map(function(i, e) {
-                    var val = $.trim($(this).hasClass('active') ? $(this).find('input').val() : $(e).attr('data-tag'));
+                    var val = $.trim($(this).hasClass('active') ? $(this).find('input').val() : $(e).parent().find('.origin-tag').text());
                     if (val) return val;
                 }).get();
                 ed.data('tags', tag_list);
@@ -217,7 +217,7 @@
 
                 if (!$(this).hasClass('active')) {
                     var tag = $(this).html();
-                    var tagName = $(this).attr('data-tag');
+                    var tagName = $(this).parent().find('.origin-tag').text();
                     if (!tagName) tagName = '';
                     // guess cursor position in text input
                     var left_percent = Math.abs(($(this).offset().left - e.pageX)/$(this).width()), caret_pos = parseInt(tag.length*left_percent),
@@ -250,7 +250,7 @@
                     if (o.removeDuplicates && ~$.inArray(tag, old_tags))
                         $('.tag-editor-tag', ed).each(function(){ if ($(this).text() == tag) $(this).closest('li').remove(); });
                     old_tags.push(tag);
-                    li.before('<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><div class="tag-editor-tag" data-tag="'+escape(tag)+'"><i class="fa '+typeOfTagThumb(escape(tag))+'"></i>'+typeOfTag(escape(tag))+'</div><div class="tag-editor-delete"><i></i></div></li>');
+                    li.before('<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><span class="origin-tag hidden">'+ escape(tag) +'</span><div class="tag-editor-tag"><i class="fa '+typeOfTagThumb(escape(tag))+'"></i>'+typeOfTag(escape(tag))+'</div><div class="tag-editor-delete"><i></i></div></li>');
                     if (o.maxTags && old_tags.length >= o.maxTags) { exceeded = true; break; }
                 }
                 input.attr('maxlength', o.maxLength).removeData('old_tag').val('')
@@ -290,11 +290,11 @@
                     }
                     // remove duplicates
                     else if (o.removeDuplicates) {
-                            $('.tag-editor-tag:not(.active)', ed).each(function(){ if ($(this).text() == tag) $(this).closest('li').remove(); });
+                            $('.tag-editor-tag:not(.active)', ed).each(function(){ if ($(this).parent().find('.origin-tag').text() == tag) $(this).closest('li').remove(); });
                         
                     }
                 }
-                input.parent().text(typeOfTag(escape(tag))).attr('data-tag', escape(tag)).removeClass('active').prepend('<i class="fa '+typeOfTagThumb(escape(tag))+'"></i>');
+                input.parent().text(typeOfTag(escape(tag))).parent().find('.origin-tag').text(escape(tag)).parent().find('.tag-editor-tag').removeClass('active').prepend('<i class="fa '+typeOfTagThumb(escape(tag))+'"></i>');
                 if (tag != old_tag) {
                     update_globals();
                 }
@@ -389,7 +389,7 @@
                 if (tag) {
                     if (o.forceLowercase) tag = tag.toLowerCase();
                     tag_list.push(tag);
-                    ed.append('<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><div class="tag-editor-tag" data-tag="'+escape(tag)+'"><i class="fa '+typeOfTagThumb(escape(tag))+'"></i>'+typeOfTag(escape(tag))+'</div><div class="tag-editor-delete"><i></i></div></li>');
+                    ed.append('<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><span class="origin-tag hidden">'+escape(tag)+'</span><div class="tag-editor-tag"><i class="fa '+typeOfTagThumb(escape(tag))+'"></i>'+typeOfTag(escape(tag))+'</div><div class="tag-editor-delete"><i></i></div></li>');
                 }
             }
             update_globals(true); // true -> no onChange callback
