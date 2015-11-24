@@ -82,7 +82,7 @@
                     if (o.maxTags && ed.data('tags').length >= o.maxTags) return false;
                     // insert new tag
                     $('<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><span class="origin-tag hidden"></span><div class="tag-editor-tag"></div><div class="tag-editor-delete"><i></i></div></li>').appendTo(ed).find('.tag-editor-tag')
-                    .html('<input type="text" maxlength="'+o.maxLength+'">').addClass('active').find('input').val(typeOfTag(val)).blur();
+                    .html('<input type="text" maxlength="'+o.maxLength+'">').addClass('active').find('input').val(val).blur();
                     if (!blur) ed.click();
                     else $('.placeholder', ed).remove();
                 } else if (options == 'removeTag') {
