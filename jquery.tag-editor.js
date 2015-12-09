@@ -19,6 +19,7 @@
 
         // helper - check first/second character
         function typeOfTag(tag) {
+            tag = tag.toLowerCase();
             switch(tag.substr(0,1)) {
                 case '-':
                     tag = tag.substring(1);
@@ -31,7 +32,7 @@
                     else tag = tag.substring(1);
                     break;
                 case '#':
-                    if ((tag.substr(1,3) === 'vj:') || (tag.substr(1,3) === 'vJ:') || (tag.substr(1,3) === 'Vj:') || (tag.substr(1,3) === 'VJ:')) tag = tag.substring(4); 
+                    if (tag.substr(1,3) === 'vj:') tag = tag.substring(4); 
                     break;
                 default:
                     break;
@@ -41,6 +42,7 @@
 
         // helper - set img in case of special characters
         function typeOfTagThumb(tag) {
+            tag = tag.toLowerCase();
             switch(tag.substr(0,1)) {
                 case '-':
                     tag = 'fa-minus-circle';
@@ -53,7 +55,7 @@
                     else tag = 'fa-user';
                     break;
                 case '#':
-                    if ((tag.substr(1,3) === 'vj:') || (tag.substr(1,3) === 'vJ:') || (tag.substr(1,3) === 'Vj:') || (tag.substr(1,3) === 'VJ:')) tag = 'visual vj';
+                    if (tag.substr(1,3) === 'vj:') tag = 'visual vj';
                     else tag = '';
                     break;
                 default:
