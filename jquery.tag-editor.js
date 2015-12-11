@@ -32,7 +32,9 @@
                     else tag = tag.substring(1);
                     break;
                 case '#':
-                    if (tag.substr(1,3) === 'vj:') tag = tag.substring(4); 
+                    if (tag.substr(1,3) === 'vj:') tag = tag.substring(4);
+                    else if (tag.substr(1,3) === 'vc:') tag = tag.substring(4); 
+                    else if (tag.substr(1,3) === 'vd:') tag = tag.substring(4); 
                     break;
                 default:
                     break;
@@ -56,6 +58,8 @@
                     break;
                 case '#':
                     if (tag.substr(1,3) === 'vj:') tag = 'visual vj';
+                    else if (tag.substr(1,3) === 'vc:') tag = 'visual vc';
+                    else if (tag.substr(1,3) === 'vd:') tag = 'visual vd';
                     else tag = '';
                     break;
                 default:
