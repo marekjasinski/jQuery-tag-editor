@@ -17,6 +17,11 @@
             return tag.replace(/"/g, "'").replace(/</g, "&lt;").replace(/>/g, "&gt;"); //.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
         }
 
+        // better typeOf solution
+        function toType(obj) {
+            return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+        }
+
         // helper - check first/second character
         function typeOfTag(tag) {
             tag = tag.toLowerCase();
@@ -32,9 +37,9 @@
                     else tag = tag.substring(1);
                     break;
                 case '#':
-                    if (tag.substr(1,3) === 'vj:') tag = tag.substring(4);
-                    else if (tag.substr(1,3) === 'vc:') tag = tag.substring(4); 
-                    else if (tag.substr(1,3) === 'vd:') tag = tag.substring(4); 
+                    var visualType = tag.substr(1,3);
+                    var vType = visualType.match('(vj:|vc:|vd:)');
+                    if (toType(vType) !== 'null') tag = tag.substring(4);
                     break;
                 default:
                     break;
@@ -57,9 +62,10 @@
                     else tag = 'fa-user';
                     break;
                 case '#':
-                    if (tag.substr(1,3) === 'vj:') tag = 'visual vj';
-                    else if (tag.substr(1,3) === 'vc:') tag = 'visual vc';
-                    else if (tag.substr(1,3) === 'vd:') tag = 'visual vd';
+                    var visualType = tag.substr(1,3); 
+                    if (visualType === 'vj:') tag = 'visual vj';
+                    else if (visualType === 'vc:') tag = 'visual vc';
+                    else if (visualType === 'vd:') tag = 'visual vd';
                     else tag = '';
                     break;
                 default:
