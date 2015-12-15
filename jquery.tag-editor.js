@@ -87,7 +87,7 @@
             var response = [];
             selector.each(function(){
                 // the editor is the next sibling to the hidden, original field
-                var el = $(this), o = el.data('options'), ed = el.next('.tag-editor');
+                var el = $(this), o = el.data('options'), ed = el.next('.tag-editor'), edLen = ed.find('li').length;
                 if (options == 'getTags')
                     response.push({field: el[0], editor: ed, tags: ed.data('tags')});
                 else if (options == 'addTag') {
@@ -100,6 +100,11 @@
                 } else if (options == 'removeTag') {
                     // trigger delete on matching tag, then click editor to create a new tag
                     $('.tag-editor-tag', ed).filter(function(){return $(this).parent().find('.origin-tag').text()==val;}).closest('li').find('.tag-editor-delete').click();
+                    if (!blur) ed.click();
+                } else if (options == 'removeAllTags') {
+                    for (var i = edLen; i > 2; i--) {
+                        ed.find('li').eq(i - 1).remove();
+                    }
                     if (!blur) ed.click();
                 } else if (options == 'destroy') {
                     el.removeClass('tag-editor-hidden-src').removeData('options').off('focus.tag-editor').next('.tag-editor').remove();
