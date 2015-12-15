@@ -103,9 +103,8 @@
                     if (!blur) ed.click();
                 } else if (options == 'removeAllTags') {
                     for (var i = edLen; i > 2; i--) {
-                        ed.find('li').eq(i - 1).remove();
+                        ed.find('li').eq(i - 2).remove();
                     }
-                    if (!blur) ed.click();
                 } else if (options == 'destroy') {
                     el.removeClass('tag-editor-hidden-src').removeData('options').off('focus.tag-editor').next('.tag-editor').remove();
                 }
