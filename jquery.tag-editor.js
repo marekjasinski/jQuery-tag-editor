@@ -38,7 +38,7 @@
                     break;
                 case '#':
                     var visualType = tag.substr(1,3);
-                    var vType = visualType.match('(vj:|vc:|vd:)');
+                    var vType = visualType.match('(v[a-z]:)|(t[a-z]:)');
                     if (toType(vType) !== 'null') tag = tag.substring(4);
                     break;
                 default:
@@ -62,10 +62,7 @@
                     else tag = 'fa-user';
                     break;
                 case '#':
-                    var visualType = tag.substr(1,3); 
-                    if (visualType === 'vj:') tag = 'visual vj';
-                    else if (visualType === 'vc:') tag = 'visual vc';
-                    else if (visualType === 'vd:') tag = 'visual vd';
+                    if ((tag.substr(1,1) === 'v') || (tag.substr(1,1) === 't')) tag = 'visual ' + tag.substr(1,2);
                     else tag = '';
                     break;
                 default:
